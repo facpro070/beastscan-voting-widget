@@ -2,7 +2,7 @@ import axios from "axios";
 import { create } from "zustand";
 import { VotingStore } from "./interfaces";
 import { arrayMove } from "@dnd-kit/sortable";
-
+import { v4 as uuidv4 } from 'uuid';
 export const useVotingStore = create<VotingStore>((set, get) => ({
     cards: [],
     original: [],
@@ -10,6 +10,7 @@ export const useVotingStore = create<VotingStore>((set, get) => ({
       const res = await axios.get("https://my.beastscan.com/test-kit");
       const cards = res.data.map((card: any) => ({
         ...card,
+        id: uuidv4(),
         votes: 0,
       }));
       set({ cards, original: cards });
@@ -26,8 +27,9 @@ export const useVotingStore = create<VotingStore>((set, get) => ({
       localStorage.setItem("cards", JSON.stringify(original));
     },
     vote: (id, delta) => {
+      console.log(id, delta);
       const cards = get().cards.map((card) =>
-        card.id === id ? { ...card, votes: card.votes + delta } : card
+        card.id === id ? { ...card, votes: (card.votes || 0) + delta } : card
       );
       set({ cards });
       localStorage.setItem("cards", JSON.stringify(cards));

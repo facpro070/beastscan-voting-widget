@@ -16,16 +16,22 @@ export const SortableCard = ({ card, onEdit, onVote }: any) => {
     return (
         <motion.div
             ref={setNodeRef}
-            {...attributes}
             style={style}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             whileHover={{ scale: 1.02 }}
-            className={`border rounded-xl p-4 shadow-lg bg-white transition-all duration-200 ${
+            className={`border rounded-xl p-4 shadow-lg bg-white transition-all duration-200 relative ${
                 isDragging ? "shadow-2xl ring-2 ring-blue-500 rotate-2" : ""
             }`}
         >
+            <div 
+                {...attributes}
+                {...listeners}
+                className="absolute top-2 right-2 cursor-grab active:cursor-grabbing p-2 text-gray-400 hover:text-gray-600 transition-colors"
+            >
+                <GripHorizontal className="w-5 h-5" />
+            </div>
             <div className="relative overflow-hidden rounded-lg mb-3">
                 <img
                     src={card.image}
@@ -68,13 +74,6 @@ export const SortableCard = ({ card, onEdit, onVote }: any) => {
             >
                 {card.button.label}
             </a>
-            
-            <div 
-                {...listeners}
-                className="w-full flex items-center justify-center mt-2 cursor-grab active:cursor-grabbing p-2 text-gray-400 hover:text-gray-600 transition-colors"
-            >
-                <GripHorizontal className="w-5 h-5" />
-            </div>
         </motion.div>
     );
 }
