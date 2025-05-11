@@ -3,8 +3,10 @@ export interface CardData {
     title: string;
     description: string;
     image: string;
-    buttonLabel: string;
-    buttonUrl: string;
+    button: {
+        label: string;
+        url: string;
+    };
     votes: number;
 }
 

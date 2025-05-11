@@ -3,9 +3,11 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
-import { Image, Link2, Type, FileText, Save, X } from "lucide-react";
+import { Link2, Type, FileText, Save, X, Link } from "lucide-react";
+import Image from "next/image";
+import { CardData } from "@/lib/interfaces";
 
-export const EditModal = ({ editing, setEditing, handleSave }: any) => {
+export const EditModal = ({ editing, setEditing, handleSave }: { editing: CardData, setEditing: (editing: CardData | null) => void, handleSave: () => void }) => {
     return (
         <Dialog open={!!editing} onOpenChange={() => setEditing(null)}>
             <DialogContent className="max-w-lg w-full">
@@ -48,7 +50,7 @@ export const EditModal = ({ editing, setEditing, handleSave }: any) => {
 
                     <div className="space-y-2">
                         <Label htmlFor="image" className="flex items-center gap-2">
-                            <Image className="w-4 h-4" />
+                            <Link className="w-4 h-4" />
                             Image URL
                         </Label>
                         <Input
@@ -61,7 +63,7 @@ export const EditModal = ({ editing, setEditing, handleSave }: any) => {
                         />
                         {editing.image && (
                             <div className="mt-2 rounded-lg overflow-hidden border">
-                                <img 
+                                <Image 
                                     src={editing.image} 
                                     alt="Preview" 
                                     className="w-full h-32 object-cover"

@@ -13,7 +13,7 @@ import { SortableCard } from "../SortableCard";
 import { EditModal } from "../EditModal";
 import { Loader2 } from "lucide-react";
 const VotingWidget: React.FC = () => {
-  const { cards, fetchCards, vote, updateCard, resetCards, reorderCards } =
+  const { cards, fetchCards, vote, updateCard, reorderCards } =
     useVotingStore();
   const [editing, setEditing] = useState<CardData | null>(null);
   const [isLoading, setIsLoading] = useState(false);

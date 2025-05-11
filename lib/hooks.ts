@@ -1,6 +1,6 @@
 import axios from "axios";
 import { create } from "zustand";
-import { VotingStore } from "./interfaces";
+import { CardData, VotingStore } from "./interfaces";
 import { arrayMove } from "@dnd-kit/sortable";
 import { v4 as uuidv4 } from 'uuid';
 export const useVotingStore = create<VotingStore>((set, get) => ({
@@ -8,7 +8,7 @@ export const useVotingStore = create<VotingStore>((set, get) => ({
     original: [],
     fetchCards: async () => {
       const res = await axios.get("https://my.beastscan.com/test-kit");
-      const cards = res.data.map((card: any) => ({
+      const cards = res.data.map((card: CardData) => ({
         ...card,
         id: uuidv4(),
         votes: 0,

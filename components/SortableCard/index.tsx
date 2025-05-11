@@ -3,8 +3,10 @@ import { CSS } from "@dnd-kit/utilities";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ThumbsUp, ThumbsDown, Edit2, GripHorizontal } from "lucide-react";
+import Image from "next/image";
+import { CardData } from "@/lib/interfaces";
 
-export const SortableCard = ({ card, onEdit, onVote }: any) => {
+export const SortableCard = ({ card, onEdit, onVote }: { card: CardData, onEdit: (card: CardData) => void, onVote: (id: string, delta: number) => void }) => {
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
         useSortable({ id: card.id });
 
@@ -33,7 +35,7 @@ export const SortableCard = ({ card, onEdit, onVote }: any) => {
                 <GripHorizontal className="w-5 h-5" />
             </div>
             <div className="relative overflow-hidden rounded-lg mb-3">
-                <img
+                <Image
                     src={card.image}
                     alt={card.title}
                     className="w-full h-48 object-cover transform hover:scale-105 transition-transform duration-300"
