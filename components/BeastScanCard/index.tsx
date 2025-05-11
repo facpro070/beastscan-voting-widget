@@ -94,4 +94,6 @@ const BeastScanCard = React.forwardRef<HTMLDivElement, IProps>(({ card, onEdit, 
     );
 })
 
+BeastScanCard.displayName = 'BeastScanCard';
+
 export default BeastScanCard;
