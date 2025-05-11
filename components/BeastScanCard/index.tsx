@@ -1,3 +1,4 @@
+import React from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Button } from "@/components/ui/button";
@@ -6,47 +7,49 @@ import { ThumbsUp, ThumbsDown, Edit2, GripHorizontal } from "lucide-react";
 import Image from "next/image";
 import { CardData } from "@/lib/interfaces";
 
-export const SortableCard = ({ card, onEdit, onVote }: { card: CardData, onEdit: (card: CardData) => void, onVote: (id: string, delta: number) => void }) => {
-    const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
-        useSortable({ id: card.id });
+interface IProps {
+    card: CardData;
+    onEdit: (card: CardData) => void;
+    onVote: (id: string, delta: number) => void;
+}
 
-    const style = {
-        transform: CSS.Transform.toString(transform),
-        transition,
-        zIndex: isDragging ? 1 : 0,
-    };
+const BeastScanCard = React.forwardRef<HTMLDivElement, IProps>(({ card, onEdit, onVote, ...props }, ref) => {
 
     return (
         <motion.div
-            ref={setNodeRef}
-            {...attributes}
-            {...listeners}
-            style={style}
+            ref={ref}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             whileHover={{ scale: 1.02 }}
-            className={`border rounded-xl p-4 shadow-lg bg-white transition-all duration-200 relative cursor-grab active:cursor-grabbing ${
-                isDragging ? "shadow-2xl ring-2 ring-blue-500 rotate-2" : ""
-            }`}
+            className={`border rounded-xl p-4 shadow-lg bg-white transition-all duration-200 relative cursor-grab active:cursor-grabbing`}
         >
-            <div className="absolute top-2 right-2 text-gray-400">
-                <GripHorizontal className="w-5 h-5" />
-            </div>
-            <div className="relative overflow-hidden rounded-lg mb-3">
-                <Image
-                    src={card.image}
-                    alt={card.title}
-                    width={400}
-                    height={200}
-                    className="w-full h-48 object-cover transform hover:scale-105 transition-transform duration-300"
-                />
+            <div
+                className="relative overflow-hidden rounded-lg mb-3 h-48 bg-gray-100"
+            >
+                {card.image ? (
+                    <Image
+                        src={card.image}
+                        alt={card.title}
+                        width={400}
+                        height={200}
+                        className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
+                        onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = 'https://via.placeholder.com/400x200?text=No+Image';
+                        }}
+                    />
+                ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
+                        No Image Available
+                    </div>
+                )}
             </div>
             <h3 className="font-bold text-xl mb-2 text-gray-800">{card.title}</h3>
             <p className="text-sm text-gray-600 mb-4 line-clamp-2">{card.description}</p>
             <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
-                    <Button 
+                    <Button
                         onClick={(e) => {
                             e.stopPropagation();
                             onVote(card.id, 1);
@@ -56,7 +59,7 @@ export const SortableCard = ({ card, onEdit, onVote }: { card: CardData, onEdit:
                         <ThumbsUp className="w-5 h-5" />
                     </Button>
                     <span className="font-bold text-lg min-w-[2rem] text-center">{card.votes}</span>
-                    <Button 
+                    <Button
                         onClick={(e) => {
                             e.stopPropagation();
                             onVote(card.id, -1);
@@ -86,6 +89,11 @@ export const SortableCard = ({ card, onEdit, onVote }: { card: CardData, onEdit:
             >
                 {card.button.label}
             </a>
+            <div className="flex items-center justify-center mt-2 text-gray-400" {...props}>
+                <GripHorizontal className="w-5 h-5" />
+            </div>
         </motion.div>
     );
-}
+})
+
+export default BeastScanCard;
